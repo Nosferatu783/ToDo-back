@@ -23,7 +23,7 @@ app.use(express.json());
 //app.use(express.json()); // To parse JSON request bodies
 
 // MongoDB connection
-const MONGO_URI = process.env.MONGO_URI || 'mongodb+srv://smithant:<MPLiGrYQjbfcgbq2>@cluster0.dyxwe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+const MONGO_URI = process.env.MONGO_URI || 'mongodb+srv://smithant:MPLiGrYQjbfcgbq2@cluster0.dyxwe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB connected'))
     .catch((err) => console.log('MongoDB connection error:', err));
