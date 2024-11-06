@@ -8,63 +8,43 @@ const router = express.Router();
 //const Todo = require('../models/Todo');
 
 // Create a new To-Do item
-router.post('/', async (req, res) => {
-    const { task, completed } = req.body;
-    try {
-        const newTodo = new Todo({
-            task,
-            completed: completed || false // Default to false if not provided
-        });
-        const savedTodo = await newTodo.save();
-        res.status(201).json(savedTodo);
-    } catch (err) {
-        res.status(500).json({ message: "Failed to create a to-do item", error: err.message });
-    }
+const authenticate = (req, res, next) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) return res.status(401).json({ message: 'Unauthorized' });
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) return res.status(401).json({ message: 'Invalid token' });
+    req.userId = decoded.userId;
+    next();
+  });
+};
+
+// Get all to-dos
+router.get('/', authenticate, async (req, res) => {
+  const todos = await Todo.find({ userId: req.userId });
+  res.json(todos);
 });
 
-// Read all To-Do items for a specific user
-router.get('/', async (req, res) => {
-    try {
-        const todos = await Todo.find();
-        res.status(200).json(todos);
-    } catch (err) {
-        res.status(500).json({ message: "Failed to fetch to-do items", error: err.message });
-    }
+// Create to-do
+router.post('/', authenticate, async (req, res) => {
+  const { task } = req.body;
+  const newTodo = new Todo({ userId: req.userId, task });
+  await newTodo.save();
+  res.json(newTodo);
 });
 
-// Update a To-Do item (by id)
-router.put('/:id', async (req, res) => {
-    const { id } = req.params;
-    const { task, completed } = req.body;
-
-    try {
-        const updatedTodo = await Todo.findByIdAndUpdate(
-            id,
-            { task, completed },
-            { new: true }
-        );
-        if (!updatedTodo) {
-            return res.status(404).json({ message: "To-Do item not found" });
-        }
-        res.status(200).json(updatedTodo);
-    } catch (err) {
-        res.status(500).json({ message: "Failed to update to-do item", error: err.message });
-    }
+// Update to-do
+router.put('/:id', authenticate, async (req, res) => {
+  const { id } = req.params;
+  const { task, completed } = req.body;
+  const todo = await Todo.findByIdAndUpdate(id, { task, completed }, { new: true });
+  res.json(todo);
 });
 
-// Delete a To-Do item (by id)
-router.delete('/:id', async (req, res) => {
-    const { id } = req.params;
-    
-    try {
-        const deletedTodo = await Todo.findByIdAndDelete(id);
-        if (!deletedTodo) {
-            return res.status(404).json({ message: "To-Do item not found" });
-        }
-        res.status(200).json({ message: "To-Do item deleted successfully" });
-    } catch (err) {
-        res.status(500).json({ message: "Failed to delete to-do item", error: err.message });
-    }
+// Delete to-do
+router.delete('/:id', authenticate, async (req, res) => {
+  await Todo.findByIdAndDelete(req.params.id);
+  res.json({ message: 'To-do deleted' });
 });
 
 module.exports = router;
