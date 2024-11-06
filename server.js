@@ -6,7 +6,8 @@ const authRoutes = require('./server/routes/auth.js');
 const todoRoutes = require('./server/routes/todos.js');
 
 const app = express();
-app.use(cors());
+//app.use(cors());
+app.use(cors({ origin: 'https://mean-to-do.com/' }));
 app.use(express.json());
 //onst express = require('express');
 //const mongoose = require('mongoose');
