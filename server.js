@@ -30,8 +30,8 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .catch((err) => console.log('MongoDB connection error:', err));
 
 // Routes
-app.use('/api/todos', todoRoutes); // API route for handling To-Do operations
-
+app.use('/api/auth', authRoutes); // API route for handling To-Do operations
+app.use('/api/todos', todoRoutes);
 // Simple home route
 app.get('/', (req, res) => {
     res.send("Welcome to the To-Do App");
