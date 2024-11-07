@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
-const authRoutes = require('./server/routes/auth.js');
+const authRoutes = require('./server/routes/auth');
 const todoRoutes = require('./server/routes/todos.js');
 
 const app = express();
