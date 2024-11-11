@@ -1,6 +1,6 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const Todo = require('./../models/todo.js');
+const Todo = require('./../models/todo');
 
 const router = express.Router();
 //const express = require('express');
