@@ -7,7 +7,7 @@ const todoRoutes = require('./server/routes/todos');
 
 const app = express();
 //app.use(cors());
-app.use(cors({ origin: 'https://mean-to-do.com/' }));
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 //onst express = require('express');
 //const mongoose = require('mongoose');
