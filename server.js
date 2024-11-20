@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const authRoutes = require('./server/routes/auth');
 const todoRoutes = require('./server/routes/todos');
-
+//Access-Control-Allow-Origin: *
 const app = express();
 //app.use(cors());
 app.use(cors({ origin: '*' }));
